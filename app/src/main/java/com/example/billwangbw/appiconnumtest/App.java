@@ -56,7 +56,7 @@ public class App extends Application {
 
                     Log.d("test==", "回到了前台了");
                     sendIconNumUtil.sendIconNumNotification(0, (Application) getApplicationContext(), 222);
-
+                //测试修改
             }
 
             @Override
