@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="50dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/mIv"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="#ff464e"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/mTv"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="我是自定义的通知栏哦 "
+        android:textColor="#000000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="厉害吧"
+
+        android:textColor="#000000" />
+</LinearLayout>
