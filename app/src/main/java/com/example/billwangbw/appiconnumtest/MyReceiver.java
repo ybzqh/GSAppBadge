@@ -49,7 +49,12 @@ public class MyReceiver extends BroadcastReceiver {
 
             } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
                 Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息(内容为): " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
-                processCustomMessage(context, bundle);
+//                processCustomMessage(context, bundle);
+                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
+                        PendingIntent.FLAG_ONE_SHOT);
+                sendIconNumUtil.sendIconNumNotification(1, (Application) context.getApplicationContext(), i, pendingIntent,
+                        "testTitle", "tests", R.mipmap.ic_launcher,
+                        "我是ticker", bundle.getString(JPushInterface.EXTRA_MESSAGE), "测试专用渠道1");
                 i++;
                 // 自定义消息不是通知，默认不会被SDK展示到通知栏上，极光推送仅负责透传给SDK。其内容和展示形式完全由开发者自己定义。
                 // 自定义消息主要用于应用的内部业务逻辑和特殊展示需求
@@ -78,7 +83,7 @@ public class MyReceiver extends BroadcastReceiver {
                 Log.d(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
             }
 
-            sendIconNumUtil.sendIconNumNotification(i, (Application) context.getApplicationContext(),222);
+            sendIconNumUtil.sendIconNumNotification(i, (Application) context.getApplicationContext());
         } catch (Exception e) {
 
         }

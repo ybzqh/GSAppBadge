@@ -42,50 +42,55 @@ public class App extends Application {
         super.onCreate();
         activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         packageName = this.getPackageName();
-        JPushInterface.setDebugMode(true);
-        JPushInterface.init(this);
-        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+     JPushInterface.setDebugMode(true);
+      JPushInterface.init(this);
 
-            @Override
-            public void onActivityCreated(Activity activity, Bundle bundle) {
-                Log.d("test==", "我是onActivityCreated");
-            }
-
-            @Override
-            public void onActivityStarted(Activity activity) {
-
-                    Log.d("test==", "回到了前台了");
-                    sendIconNumUtil.sendIconNumNotification(0, (Application) getApplicationContext(), 222);
-                //测试修改
-            }
-
-            @Override
-            public void onActivityResumed(Activity activity) {
-                Log.d("test==", "我是onActivityResumed");
-            }
-
-            @Override
-            public void onActivityPaused(Activity activity) {
-                Log.d("test==", "我是onActivityPaused");
-            }
-
-            @Override
-            public void onActivityStopped(Activity activity) {
-
-                    Log.d("test==", "滚后台去了");
-
-            }
-
-            @Override
-            public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
-                Log.d("test==", "我是onActivitySaveInstanceState");
-            }
-
-            @Override
-            public void onActivityDestroyed(Activity activity) {
-                Log.d("test==", "我是onActivityDestroyed");
-            }
-        });
+        //设置每次进入app时清空角标  如果需自定义则在application的onCreate方法调用
+        // registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks()
+        sendIconNumUtil.init(this);
+//
+//        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+//
+//            @Override
+//            public void onActivityCreated(Activity activity, Bundle bundle) {
+//                Log.d("test==", "我是onActivityCreated");
+//            }
+//
+//            @Override
+//            public void onActivityStarted(Activity activity) {
+//
+//                    Log.d("test==", "回到了前台了");
+//                    sendIconNumUtil.sendIconNumNotification(0, (Application) getApplicationContext(), 222);
+//                //测试修改
+//            }
+//
+//            @Override
+//            public void onActivityResumed(Activity activity) {
+//                Log.d("test==", "我是onActivityResumed");
+//            }
+//
+//            @Override
+//            public void onActivityPaused(Activity activity) {
+//                Log.d("test==", "我是onActivityPaused");
+//            }
+//
+//            @Override
+//            public void onActivityStopped(Activity activity) {
+//
+//                    Log.d("test==", "滚后台去了");
+//
+//            }
+//
+//            @Override
+//            public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+//                Log.d("test==", "我是onActivitySaveInstanceState");
+//            }
+//
+//            @Override
+//            public void onActivityDestroyed(Activity activity) {
+//                Log.d("test==", "我是onActivityDestroyed");
+//            }
+//        });
     }
 
 

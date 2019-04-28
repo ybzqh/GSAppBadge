@@ -32,10 +32,10 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.VIBRATE" />
     <!-- HUWEI -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+    <!--闪光的灯以及震动权限-->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
@@ -84,27 +84,26 @@
 
         <!--&lt;!&ndash; since 3.0.9 Required SDK 核心功能&ndash;&gt;-->
         <!--<provider-->
-            <!--android:name="cn.jpush.android.service.DataProvider"-->
-            <!--android:authorities="com.example.billwangbw.appiconnumtest.DataProvider"-->
-            <!--android:exported="true" />-->
+        <!--android:name="cn.jpush.android.service.DataProvider"-->
+        <!--android:authorities="com.example.billwangbw.appiconnumtest.DataProvider"-->
+        <!--android:exported="true" />-->
         <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的 JPush 服务相互拉起的功能。 -->
         <!-- 若不启用该功能可删除该组件，或把 enabled 设置成 false ；拉起服务被关闭，App 不会通过拉起服务拉起其他的 App，也不会被其他 App 拉起。 -->
         <service
             android:name="cn.jpush.android.service.DaemonService"
             android:enabled="true"
             android:exported="true">
-            <intent-filter >
+            <intent-filter>
                 <action android:name="cn.jpush.android.intent.DaemonService" />
-                <category android:name="com.example.billwangbw.appiconnumtest"/>
+                <category android:name="com.example.billwangbw.appiconnumtest" />
             </intent-filter>
         </service>
 
         <!-- since 3.1.0 Required SDK 核心功能-->
         <provider
-            android:authorities="com.example.billwangbw.appiconnumtest.DownloadProvider"
             android:name="cn.jpush.android.service.DownloadProvider"
-            android:exported="true"
-            />
+            android:authorities="com.example.billwangbw.appiconnumtest.DownloadProvider"
+            android:exported="true" />
         <!-- 替换原生极光推送接收器 -->
         <receiver
             android:name=".MyReceiver"
@@ -123,8 +122,8 @@
         <!-- Required SDK 核心功能-->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
-            android:enabled="true" >
->
+            android:enabled="true">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -133,6 +132,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
@@ -141,10 +141,11 @@
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:exported="false" >
+            android:exported="false"
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="cn.jpush.android.ui.PushActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="com.example.billwangbw.appiconnumtest" />
             </intent-filter>
@@ -165,12 +166,13 @@
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
-            android:exported="false" >
-        </service>
+            android:exported="false"></service>
 
         <!-- Required SDK 核心功能-->
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
-        <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="developer-default" />
         <!-- Required. AppKey copied from Portal -->
 
 

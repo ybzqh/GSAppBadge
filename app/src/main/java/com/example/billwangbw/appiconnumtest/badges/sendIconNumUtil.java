@@ -60,15 +60,62 @@ public class sendIconNumUtil {
      * @param SmallIcon     图标
      * @param Ticker
      * @param ContentText   通知内容
+     * @param channelName   通知栏渠道划分（用来区分通知类型如果不传默认为其他分类）
      */
     public static void sendIconNumNotification(int i, Application context, int notifyID, PendingIntent pendingIntent, String title, String channelId, int SmallIcon
-            , String Ticker, String ContentText) {
+            , String Ticker, String ContentText, String channelName) {
+
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (nm == null) return;
         Notification notification = null;
         String notificationChannelId = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = createNotificationChannel(channelId);
+            NotificationChannel notificationChannel = createNotificationChannel(channelId, channelName);
+            nm.createNotificationChannel(notificationChannel);
+            notificationChannelId = notificationChannel.getId();
+
+        }
+        notification = new NotificationCompat.Builder(context, notificationChannelId)
+                .setSmallIcon(context.getApplicationInfo().icon)
+                .setWhen(System.currentTimeMillis())
+                .setTicker(Ticker)
+                .setContentTitle(title)
+                .setContentText(ContentText)
+                .setSmallIcon(SmallIcon)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .build();
+        try {
+            notification = setIconBadgeNumManager.setIconBadgeNum(context, notification, i);
+            nm.notify(notifyID, notification);
+        } catch (Exception e) {
+            if (e.toString().equals(""))
+                Log.d("sendIconNumUtil", e.toString());
+        }
+    }
+
+    /**
+     * 设置角标并且带通知栏(不设置通知栏渠道 默认为渠道为：其他)
+     *
+     * @param i             角标数字（为0时清空角标）
+     * @param context       上下文
+     * @param notifyID      通知id
+     * @param pendingIntent 跳转事件
+     * @param title         标题
+     * @param channelId     通知栏 id
+     * @param SmallIcon     图标
+     * @param Ticker
+     * @param ContentText   通知内容
+     */
+    public static void sendIconNumNotification(int i, Application context, int notifyID, PendingIntent pendingIntent, String title, String channelId, int SmallIcon
+            , String Ticker, String ContentText) {
+
+        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (nm == null) return;
+        Notification notification = null;
+        String notificationChannelId = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = createNotificationChannel(channelId, "");
             nm.createNotificationChannel(notificationChannel);
             notificationChannelId = notificationChannel.getId();
 
@@ -113,10 +160,11 @@ public class sendIconNumUtil {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private static NotificationChannel createNotificationChannel(String channelId) {
+    private static NotificationChannel createNotificationChannel(String channelId, String channelName) {
+        String channelNames = channelName;
         NotificationChannel channel = null;
         channel = new NotificationChannel(channelId,
-                "Channel1", NotificationManager.IMPORTANCE_DEFAULT);
+                (channelNames.equals("") ? "其他" : channelNames), NotificationManager.IMPORTANCE_DEFAULT);
         channel.canBypassDnd();//是否绕过勿扰模式
         channel.setBypassDnd(true);
         channel.enableLights(true); //是否在桌面icon右上角展示小红点

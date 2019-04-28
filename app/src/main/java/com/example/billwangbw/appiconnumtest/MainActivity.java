@@ -31,33 +31,27 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     IconBadgeNumManager setIconBadgeNumManager = new IconBadgeNumManager();
     public static int i = 0;
-    private TextView mTvOne, mTvTwo;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //sendIconNumNotification(0);
-        // sendIconNumUtil.sendIconNumNotification(0, getApplication());
-
         Log.e(TAG, Build.MANUFACTURER);
         Log.e(TAG, new LauncherHelper().getLauncherPackageName(this));
-//        mTvOne = findViewById(R.id.button1)
         findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//               Intent i = new Intent(MainActivity.this, MyService.class);
-//                startService(i);
-//            //    i++;
-//                (int i, Application context, int notifyID, String title, PendingIntent pendingIntent, String channelId, int SmallIcon
-//            , String Ticker, String ContentText)
+                //点击导航栏的跳转事件（系统默认导航栏）
                 Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                //从导航传递的数据
                 intent.putExtra("test", "我是测试从通知栏传过来的数据");
                 i++;
                 String chann = "test"+ i;
-                PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-                sendIconNumUtil.sendIconNumNotification(i, getApplication(), 666, pendingIntent, "testTitle", chann, R.mipmap.ic_launcher, "我是ticker", "我是Contentext");
+                PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent,
+                        PendingIntent.FLAG_ONE_SHOT);
+                sendIconNumUtil.sendIconNumNotification(1, getApplication(), i, pendingIntent,
+                        "testTitle", "tests", R.mipmap.ic_launcher,
+                        "我是ticker", i+"","测试专用渠道2");
                 // sendIconNumNotification(5);
             }
         });
@@ -65,15 +59,14 @@ public class MainActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View view) {
+                //自定义导航栏
                 String notificationChannelId = null;
                 NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    //8.0以上需设置消息通道id
                     NotificationChannel notificationChannel = createNotificationChannel();
-
                     nm.createNotificationChannel(notificationChannel);
                     notificationChannelId = notificationChannel.getId();
-
-
                 }
                 Notification notification = null;
                 RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(),R.layout.image_item);
@@ -81,83 +74,28 @@ public class MainActivity extends AppCompatActivity {
                 notification = new NotificationCompat.Builder(MainActivity.this, notificationChannelId)
                         .setSmallIcon(getApplicationInfo().icon)
                         .setWhen(System.currentTimeMillis())
-//                        .setContentTitle("2019年3月14日")
-//                        .setContentText("天气晴，心情困")
-//                        .setContentTitle("title")
-//                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setAutoCancel(true)
                         .setCustomContentView(remoteViews)
                        .build();
                 sendIconNumUtil.sendIconNumNotification(5,getApplication(),555,notification,nm);
-                //     Intent i = new Intent(MainActivity.this, MyService.class);
-//                stopService(i);
             }
         });
 
-        Intent intentCancel = new Intent(getApplicationContext(), NotificationBroadcastReceiver.class);
-        PendingIntent pendingIntentCancel = PendingIntent.getBroadcast(getApplicationContext(), 0,
-                intentCancel, PendingIntent.FLAG_ONE_SHOT);
-
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this);
-
-
-        mBuilder.setDeleteIntent(pendingIntentCancel);
-        //取消消息回调
     }
 
-    private void sendIconNumNotification(int i) {
-        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (nm == null) return;
-        String notificationChannelId = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = createNotificationChannel();
-
-            nm.createNotificationChannel(notificationChannel);
-            notificationChannelId = notificationChannel.getId();
-
-
-        } else {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                addNotificationChannel();
-//            }
-        }
-        Intent intent = new Intent(this, Main2Activity.class);
-        intent.putExtra("test", "我是测试从通知栏传过来的数据");
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        Notification notification = null;
-        try {
-            notification = new NotificationCompat.Builder(this, notificationChannelId)
-                    .setSmallIcon(getApplicationInfo().icon)
-                    .setWhen(System.currentTimeMillis())
-                    .setContentTitle("2019年3月14日")
-                    .setContentText("天气晴，心情困")
-                    .setContentTitle("title")
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true)
-                    .build();
-
-            notification = setIconBadgeNumManager.setIconBadgeNum(getApplication(), notification, 5);
-            nm.notify(32154, notification);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private static NotificationChannel createNotificationChannel() {
         String channelId = "test";
         NotificationChannel channel = null;
         channel = new NotificationChannel(channelId,
-                "Channel1", NotificationManager.IMPORTANCE_DEFAULT);
-        channel.canBypassDnd();//是否绕过勿扰模式
-        channel.setBypassDnd(true);
+                "第四个权限", NotificationManager.IMPORTANCE_HIGH);
         channel.enableLights(true); //是否在桌面icon右上角展示小红点
-        channel.setLightColor(Color.RED); //小红点颜色
+        channel.setLightColor(Color.BLACK); //小红点颜色
         channel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
         return channel;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void addNotificationChannel() {

@@ -11,5 +11,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="My Name is Main2Activity" />
+        android:text="My Name is Main2Activity(点击任意地方即可显示从标题栏传递过来的信息)" />
 </RelativeLayout>
