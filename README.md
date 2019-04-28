@@ -1,6 +1,6 @@
 华为手机需要添加两个权限：
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+   <uses-permission android:name="android.permission.INTERNET" />
+   <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
 最好在加上闪光灯以及震动权限：
  <!--闪光的灯以及震动权限-->
     <uses-permission android:name="android.permission.VIBRATE" />
