@@ -1,15 +1,8 @@
 package com.example.billwangbw.appiconnumtest;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-
-import java.util.List;
 
 /**
  * 创建时间： 2019/3/11 0011.
@@ -17,17 +10,8 @@ import java.util.List;
  * 功能：
  */
 
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
-import com.tot.badges.sendIconNumUtil;
-
-import java.util.concurrent.TimeUnit;
+import com.tot.badges.SendIconNumUtil;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -36,18 +20,21 @@ public class App extends Application {
     private String packageName;
     private boolean stop = false;
     private int mFinalCount = 0;
+    Exception exception = null;
+    String msg = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
         activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         packageName = this.getPackageName();
-     JPushInterface.setDebugMode(true);
-      JPushInterface.init(this);
-
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
+        JPushInterface.clearAllNotifications(this);
         //设置每次进入app时清空角标  如果需自定义则在application的onCreate方法调用
         // registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks()
-        sendIconNumUtil.init(this);
+        SendIconNumUtil.init(this);
 //
 //        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 //
@@ -60,7 +47,7 @@ public class App extends Application {
 //            public void onActivityStarted(Activity activity) {
 //
 //                    Log.d("test==", "回到了前台了");
-//                    sendIconNumUtil.sendIconNumNotification(0, (Application) getApplicationContext(), 222);
+//                    SendIconNumUtil.sendIconNumNotification(0, (Application) getApplicationContext(), 222);
 //                //测试修改
 //            }
 //

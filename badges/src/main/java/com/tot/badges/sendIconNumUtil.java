@@ -7,7 +7,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,15 +14,21 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 创建时间： 2019/3/12 0012.
  * 创建人：  yanbin
  * 功能：
  */
 
-public class sendIconNumUtil {
+public class SendIconNumUtil {
 
     private static IconBadgeNumManager setIconBadgeNumManager = new IconBadgeNumManager();
+    private static NotificationManager nm, customNm;
+    private static List<String> mData = new ArrayList<>();
+    private static List<String> mCustomData = new ArrayList<>();
 
     /**
      * 设置角标（不带出现通知栏）
@@ -32,7 +37,7 @@ public class sendIconNumUtil {
      * @param context 上下文
      */
     public static void sendIconNumNotification(int i, Application context) {
-        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (nm == null) return;
         String notificationChannelId = null;
 
@@ -65,7 +70,7 @@ public class sendIconNumUtil {
      */
     public static void sendIconNumNotification(int i, Application context, int notifyID, PendingIntent pendingIntent, String title, String channelId, int SmallIcon
             , String Ticker, String ContentText, String channeName) {
-        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (nm == null) return;
         Notification notification = null;
         String notificationChannelId = null;
@@ -73,7 +78,7 @@ public class sendIconNumUtil {
             NotificationChannel notificationChannel = createNotificationChannel(channelId, channeName);
             nm.createNotificationChannel(notificationChannel);
             notificationChannelId = notificationChannel.getId();
-
+            mData.add(notifyID + "");
 
         }
         notification = new NotificationCompat.Builder(context, notificationChannelId)
@@ -93,7 +98,7 @@ public class sendIconNumUtil {
             nm.notify(notifyID, notification);
         } catch (Exception e) {
             if (e.toString().equals(""))
-                Log.d("sendIconNumUtil", e.toString());
+                Log.d("SendIconNumUtil", e.toString());
         }
     }
 
@@ -112,7 +117,7 @@ public class sendIconNumUtil {
      */
     public static void sendIconNumNotification(int i, Application context, int notifyID, PendingIntent pendingIntent, String title, int SmallIcon
             , String Ticker, String ContentText) {
-        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (nm == null) return;
         Notification notification = null;
         String notificationChannelId = null;
@@ -121,7 +126,7 @@ public class sendIconNumUtil {
                     createNotificationChannel("otherTypes", "");
             nm.createNotificationChannel(notificationChannel);
             notificationChannelId = notificationChannel.getId();
-
+            mData.add(notifyID + "");
 
         }
         notification = new NotificationCompat.Builder(context, notificationChannelId)
@@ -139,7 +144,7 @@ public class sendIconNumUtil {
             nm.notify(notifyID, notification);
         } catch (Exception e) {
             if (e.toString().equals(""))
-                Log.d("sendIconNumUtil", e.toString());
+                Log.d("SendIconNumUtil", e.toString());
         }
     }
 
@@ -157,9 +162,38 @@ public class sendIconNumUtil {
         try {
             notification = setIconBadgeNumManager.setIconBadgeNum(context, notification, i);
             nm.notify(notifyID, notification);
+            customNm = nm;
+            mCustomData.add(notifyID + "");
         } catch (Exception e) {
-            Log.d("sendIconNumUtil", e.toString());
+            Log.d("SendIconNumUtil", e.toString());
         }
+    }
+
+
+    //清除通知栏消息(默认的 更具传入消息id清除)
+    public static void clearIconNumNotifucation(int notifyId) {
+        nm.cancel(notifyId);
+    }
+
+    //清除自定义消息的
+    public static void clearCustomIconNumNotifucation(int notifyId) {
+        customNm.cancel(notifyId);
+    }
+
+    //清除所有的
+    public static void clearAllIconNumNotifucation() {
+        int notifyid, notifyAllId;
+        if (mData.size() > 0 && mData != null) {
+            for (int i = 0; i < mData.size(); i++) {
+                notifyid = Integer.parseInt(mData.get(i));
+                nm.cancel(notifyid);
+            }
+        }
+        if (mCustomData.size() > 0 && mCustomData != null)
+            for (int i = 0; i < mCustomData.size(); i++) {
+                notifyAllId = Integer.parseInt(mCustomData.get(i));
+                customNm.cancel(notifyAllId);
+            }
     }
 
 
@@ -193,7 +227,7 @@ public class sendIconNumUtil {
             public void onActivityStarted(Activity activity) {
 
                 //不带通知栏的
-                sendIconNumUtil.sendIconNumNotification(0, application);
+                SendIconNumUtil.sendIconNumNotification(0, application);
                 //测试修改
             }
 

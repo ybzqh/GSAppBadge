@@ -1,6 +1,5 @@
 package com.example.billwangbw.appiconnumtest;
 
-import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,8 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,48 +15,36 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 import com.tot.badges.IconBadgeNumManager;
 import com.tot.badges.LauncherHelper;
-import com.tot.badges.sendIconNumUtil;
+import com.tot.badges.SendIconNumUtil;
 
-import java.util.List;
-import java.util.TimerTask;
+import cn.jpush.android.api.JPushInterface;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     IconBadgeNumManager setIconBadgeNumManager = new IconBadgeNumManager();
     public static int i = 0;
-
+    NotificationManager nm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.e(TAG, Build.MANUFACTURER);
         Log.e(TAG, new LauncherHelper().getLauncherPackageName(this));
+        findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                JPushInterface.clearAllNotifications(MainActivity.this);
+            SendIconNumUtil.clearAllIconNumNotifucation();
+            }
+        });
         findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //点击导航栏的跳转事件（系统默认导航栏）
-                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-                //从导航传递的数据
-                intent.putExtra("test", "我是测试从通知栏传过来的数据");
-                i++;
-                String chann = "test"+ i;
-                PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent,
-                        PendingIntent.FLAG_ONE_SHOT);
-                sendIconNumUtil.sendIconNumNotification(1, getApplication(), i, pendingIntent,
-                        "testTitle", "tests", R.mipmap.ic_launcher,
-                        "我是ticker", i+"","测试专用渠道2");
-                // sendIconNumNotification(5);
-            }
-        });
-        findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onClick(View view) {
-                //自定义导航栏
+
                 String notificationChannelId = null;
                 NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -69,15 +54,53 @@ public class MainActivity extends AppCompatActivity {
                     notificationChannelId = notificationChannel.getId();
                 }
                 Notification notification = null;
-                RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(),R.layout.image_item);
-                remoteViews.setTextViewText(R.id.mTv,"wohahahahahahah");
+                RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.image_item);
+                remoteViews.setTextViewText(R.id.mTv, "wohahahahahahah");
                 notification = new NotificationCompat.Builder(MainActivity.this, notificationChannelId)
                         .setSmallIcon(getApplicationInfo().icon)
                         .setWhen(System.currentTimeMillis())
                         .setAutoCancel(true)
                         .setCustomContentView(remoteViews)
-                       .build();
-                sendIconNumUtil.sendIconNumNotification(5,getApplication(),555,notification,nm);
+                        .build();
+                SendIconNumUtil.sendIconNumNotification(5, getApplication(), 666, notification, nm);
+
+                //点击导航栏的跳转事件（系统默认导航栏）
+//                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+//                //从导航传递的数据
+//                intent.putExtra("test", "我是测试从通知栏传过来的数据");
+//                i++;
+//                String chann = "test" + i;
+//                PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent,
+//                        PendingIntent.FLAG_ONE_SHOT);
+//                SendIconNumUtil.sendIconNumNotification(1, getApplication(), i, pendingIntent,
+//                        "testTitle", "tests", R.mipmap.ic_launcher,
+//                        "我是ticker", i + "", "测试专用渠道2");
+                // sendIconNumNotification(5);
+            }
+        });
+        findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onClick(View view) {
+                //自定义导航栏
+                String notificationChannelId = null;
+                 nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    //8.0以上需设置消息通道id
+                    NotificationChannel notificationChannel = createNotificationChannel();
+                    nm.createNotificationChannel(notificationChannel);
+                    notificationChannelId = notificationChannel.getId();
+                }
+                Notification notification = null;
+                RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.image_item);
+                remoteViews.setTextViewText(R.id.mTv, "wohahahahahahah");
+                notification = new NotificationCompat.Builder(MainActivity.this, notificationChannelId)
+                        .setSmallIcon(getApplicationInfo().icon)
+                        .setWhen(System.currentTimeMillis())
+                        .setAutoCancel(true)
+                        .setCustomContentView(remoteViews)
+                        .build();
+                SendIconNumUtil.sendIconNumNotification(5, getApplication(), 555, notification, nm);
             }
         });
 

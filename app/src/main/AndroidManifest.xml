@@ -39,6 +39,10 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
+    <!--//声明camera权限-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -174,7 +178,8 @@
             android:name="JPUSH_CHANNEL"
             android:value="developer-default" />
         <!-- Required. AppKey copied from Portal -->
-
+        <!--//添加AR选项，在启动应用时会判断是否安装了ARCore-->
+        <meta-data android:name="com.google.ar.core" android:value="required" />
 
     </application>
 

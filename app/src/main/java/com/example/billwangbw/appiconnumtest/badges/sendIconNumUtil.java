@@ -90,7 +90,7 @@ public class sendIconNumUtil {
             nm.notify(notifyID, notification);
         } catch (Exception e) {
             if (e.toString().equals(""))
-                Log.d("sendIconNumUtil", e.toString());
+                Log.d("SendIconNumUtil", e.toString());
         }
     }
 
@@ -135,7 +135,7 @@ public class sendIconNumUtil {
             nm.notify(notifyID, notification);
         } catch (Exception e) {
             if (e.toString().equals(""))
-                Log.d("sendIconNumUtil", e.toString());
+                Log.d("SendIconNumUtil", e.toString());
         }
     }
 
@@ -154,7 +154,7 @@ public class sendIconNumUtil {
             notification = setIconBadgeNumManager.setIconBadgeNum(context, notification, i);
             nm.notify(notifyID, notification);
         } catch (Exception e) {
-            Log.d("sendIconNumUtil", e.toString());
+            Log.d("SendIconNumUtil", e.toString());
         }
     }
 

@@ -168,12 +168,17 @@ public class IconBadgeNumManager {
      * 在vivo开发者平台上与人工客服联系后，对方回复暂时没有公开的方法可以设置，也没有渠道可以申请，只有vivo特别指定的应用可以实现（微信、微博等）
      */
     public Notification setVIVOIconBadgeNum(@NonNull Application context, Notification notification, int count) throws Exception {
-        if (true) {
+        try {
+            Intent intent = new Intent("launcher.action.CHANGE_APPLICATION_NOTIFICATION_NUM");
+            intent.putExtra("packageName", context.getPackageName());
+            String launchClassName = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName()).getComponent().getClassName();
+            intent.putExtra("className", launchClassName);
+            intent.putExtra("notificationNum", count);
+            context.sendBroadcast(intent);
+        } catch (Exception e) {
             throw new Exception(NOTIFICATION_VIVO_ERROR);
         }
-
-
-        return null;
+        return notification;
     }
 
     /**

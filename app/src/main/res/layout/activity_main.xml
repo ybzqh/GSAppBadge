@@ -17,4 +17,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="stop   " />
+    <Button
+        android:id="@+id/button3"
+        android:text="清除自定义的消息"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

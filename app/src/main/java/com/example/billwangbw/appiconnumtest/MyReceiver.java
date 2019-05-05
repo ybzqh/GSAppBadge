@@ -1,26 +1,19 @@
 package com.example.billwangbw.appiconnumtest;
 
 import android.app.Application;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.tot.badges.sendIconNumUtil;
 
-import java.net.URISyntaxException;
+import com.tot.badges.SendIconNumUtil;
 
 import cn.jpush.android.api.JPushInterface;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.example.billwangbw.appiconnumtest.MainActivity.i;
 
 /**
@@ -31,7 +24,6 @@ import static com.example.billwangbw.appiconnumtest.MainActivity.i;
 
 public class MyReceiver extends BroadcastReceiver {
     private static final String TAG = "JIGUANG";
-    private NotificationManager notificationManager;
     public static String regId;
     String extra_json;
 
@@ -52,7 +44,7 @@ public class MyReceiver extends BroadcastReceiver {
 //                processCustomMessage(context, bundle);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
                         PendingIntent.FLAG_ONE_SHOT);
-                sendIconNumUtil.sendIconNumNotification(1, (Application) context.getApplicationContext(), i, pendingIntent,
+                SendIconNumUtil.sendIconNumNotification(1, (Application) context.getApplicationContext(), i, pendingIntent,
                         "testTitle", "tests", R.mipmap.ic_launcher,
                         "我是ticker", bundle.getString(JPushInterface.EXTRA_MESSAGE), "测试专用渠道1");
                 i++;
@@ -83,53 +75,11 @@ public class MyReceiver extends BroadcastReceiver {
                 Log.d(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
             }
 
-            sendIconNumUtil.sendIconNumNotification(i, (Application) context.getApplicationContext());
+            SendIconNumUtil.sendIconNumNotification(i, (Application) context.getApplicationContext());
         } catch (Exception e) {
 
         }
 
     }
 
-
-    private void processCustomMessage(Context context, Bundle bundle) {
-
-        String channelID = "1";
-        String channelName = "channel_name";
-        String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
-        // 跳转的Activity
-        Intent intent = new Intent(context, Main2Activity.class);
-        intent.putExtra("test", message);
-
-        Log.d(TAG, message);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-
-        // 获得系统推送的自定义消息
-
-
-        notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-
-        //适配安卓8.0的消息渠道
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(context, channelID);
-
-        notification.setAutoCancel(true)
-                .setContentText(message)
-                .setContentTitle("我是Title")
-                .setTicker("托儿所")
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setContentIntent(pendingIntent);
-
-        notificationManager.notify((int) (System.currentTimeMillis() / 1000), notification.build());
-
-        // managers.cancel(R.mipmap.ic_launcher);
-
-    }
 }
